@@ -160,6 +160,31 @@ const AudioPlayer = () => {
     }
   };
 
+  const handleVolumeReset = () => {
+    const normalVolume = 0.4; // Reset to normal volume
+    dispatch(setVolume(normalVolume));
+    if (audioRef.current) {
+      audioRef.current.volume = normalVolume;
+    }
+  };
+
+  const handleVolumeMute = () => {
+    if (volume > 0) {
+      // Store current volume and mute
+      dispatch(setVolume(0));
+      if (audioRef.current) {
+        audioRef.current.volume = 0;
+      }
+    } else {
+      // Restore to previous volume or default
+      const restoreVolume = 0.4;
+      dispatch(setVolume(restoreVolume));
+      if (audioRef.current) {
+        audioRef.current.volume = restoreVolume;
+      }
+    }
+  };
+
   const handleSkipNext = () => {
     dispatch(nextSong());
   };
@@ -208,7 +233,7 @@ const AudioPlayer = () => {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-gray-900/95 to-black/95 backdrop-blur-xl border-t border-gray-700/50 p-4 z-50">
+    <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-spotify-black/95 to-spotify-black-light/95 backdrop-blur-xl border-t border-gray-700/30 p-4 z-50 shadow-lg">
       <audio
         ref={audioRef}
         onTimeUpdate={handleTimeUpdate}
@@ -228,17 +253,17 @@ const AudioPlayer = () => {
         }}
       />
 
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className="container-responsive flex items-center justify-between">
         {/* Song Info */}
         <div className="flex items-center space-x-4 flex-1 min-w-0">
-          <div className="w-16 h-16 bg-gradient-to-br from-spotify-green to-green-400 rounded-xl flex items-center justify-center shadow-lg animate-float">
+          <div className="w-16 h-16 bg-gradient-spotify rounded-xl flex items-center justify-center shadow-spotify animate-float">
             <span className="text-2xl font-bold text-white">🎵</span>
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-white font-semibold truncate">
+            <div className="text-white font-semibold truncate text-shadow">
               {currentSong.title}
             </div>
-            <div className="text-gray-400 text-sm truncate">
+            <div className="text-spotify-gray text-sm truncate">
               {currentSong.artist}
             </div>
           </div>
@@ -250,38 +275,38 @@ const AudioPlayer = () => {
           <div className="flex items-center space-x-6 mb-3">
             <button
               onClick={handleShuffleToggle}
-              className={`text-2xl transition-all duration-300 hover:scale-110 ${
+              className={`player-control text-2xl transition-all duration-300 hover:scale-110 ${
                 shuffle
-                  ? "text-spotify-green"
-                  : "text-gray-400 hover:text-white"
+                  ? "text-spotify-green bg-spotify-green/20 border-spotify-green/30"
+                  : "text-spotify-gray hover:text-white"
               }`}
             >
               🔀
             </button>
             <button
               onClick={handleSkipPrevious}
-              className="text-2xl text-gray-400 hover:text-white transition-all duration-300 hover:scale-110"
+              className="player-control text-2xl text-spotify-gray hover:text-white transition-all duration-300 hover:scale-110"
             >
               ⏮️
             </button>
             <button
               onClick={handlePlayPause}
-              className="w-14 h-14 bg-gradient-to-br from-spotify-green to-green-400 text-white rounded-full flex items-center justify-center hover:from-green-400 hover:to-spotify-green hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="player-control-primary text-2xl text-white hover:scale-110 transition-all duration-300 shadow-spotify hover:shadow-spotify-hover"
             >
               <span className="text-2xl">{isPlaying ? "⏸️" : "▶️"}</span>
             </button>
             <button
               onClick={handleSkipNext}
-              className="text-2xl text-gray-400 hover:text-white transition-all duration-300 hover:scale-110"
+              className="player-control text-2xl text-spotify-gray hover:text-white transition-all duration-300 hover:scale-110"
             >
               ⏭️
             </button>
             <button
               onClick={handleRepeatToggle}
-              className={`text-2xl transition-all duration-300 hover:scale-110 ${
+              className={`player-control text-2xl transition-all duration-300 hover:scale-110 ${
                 repeat !== "none"
-                  ? "text-spotify-green"
-                  : "text-gray-400 hover:text-white"
+                  ? "text-spotify-green bg-spotify-green/20 border-spotify-green/30"
+                  : "text-spotify-gray hover:text-white"
               }`}
             >
               {getRepeatIcon()}
@@ -290,25 +315,22 @@ const AudioPlayer = () => {
 
           {/* Progress Bar */}
           <div className="flex items-center space-x-3 w-full">
-            <span className="text-gray-400 text-xs w-12 text-right">
+            <span className="text-spotify-gray text-xs w-12 text-right font-medium">
               {formatTime(currentTime)}
             </span>
             <div className="flex-1 relative">
-              <div
-                className="w-full h-2 bg-gray-700 rounded-full cursor-pointer relative overflow-hidden"
-                onClick={handleSeek}
-              >
+              <div className="progress-bar" onClick={handleSeek}>
                 <div
-                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-spotify-green to-green-400 rounded-full transition-all duration-100 shadow-lg"
+                  className="progress-fill"
                   style={{ width: `${(currentTime / duration) * 100}%` }}
                 />
                 <div
-                  className="absolute top-1/2 left-0 w-3 h-3 bg-white rounded-full transform -translate-y-1/2 -translate-x-1/2 shadow-lg opacity-0 hover:opacity-100 transition-opacity duration-200"
+                  className="progress-handle"
                   style={{ left: `${(currentTime / duration) * 100}%` }}
                 />
               </div>
             </div>
-            <span className="text-gray-400 text-xs w-12 text-left">
+            <span className="text-spotify-gray text-xs w-12 text-left font-medium">
               {formatTime(duration)}
             </span>
           </div>
@@ -319,35 +341,60 @@ const AudioPlayer = () => {
           {/* Queue Button */}
           <button
             onClick={() => setShowQueue(!showQueue)}
-            className="text-gray-400 hover:text-white transition-all duration-300 hover:scale-110"
+            className="player-control text-xl text-spotify-gray hover:text-white transition-all duration-300 hover:scale-110"
           >
-            <span className="text-xl">📋</span>
+            📋
           </button>
 
           {/* Volume Control */}
           <div className="relative group">
-            <button className="text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">
-              <span className="text-xl">
-                {volume === 0 ? "🔇" : volume < 0.5 ? "🔉" : "🔊"}
-              </span>
+            <button
+              onClick={handleVolumeMute}
+              className="player-control text-xl text-spotify-gray hover:text-white transition-all duration-300 hover:scale-110"
+            >
+              {volume === 0
+                ? "🔇"
+                : volume < 0.3
+                ? "🔉"
+                : volume < 0.6
+                ? "🔊"
+                : "🔊"}
             </button>
-            <div className="absolute bottom-full right-0 mb-3 bg-gray-800/95 backdrop-blur-xl p-4 rounded-xl border border-gray-700/50 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-95 group-hover:scale-100">
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={volume}
-                onChange={handleVolumeChange}
-                className="w-24 h-2 bg-gray-700 rounded-full appearance-none cursor-pointer slider"
-                style={{
-                  background: `linear-gradient(to right, #1DB954 0%, #1DB954 ${
-                    volume * 100
-                  }%, #4D4D4D ${volume * 100}%, #4D4D4D 100%)`,
-                }}
-              />
-              <div className="text-center text-white text-xs mt-2 font-medium">
-                {Math.round(volume * 100)}%
+            <div className="absolute bottom-full right-0 mb-3 card p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-95 group-hover:scale-100">
+              <div className="flex flex-col items-center space-y-3">
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  className="w-24 h-2 bg-gray-700 rounded-full appearance-none cursor-pointer slider"
+                  style={{
+                    background: `linear-gradient(to right, #1DB954 0%, #1DB954 ${
+                      volume * 100
+                    }%, #4D4D4D ${volume * 100}%, #4D4D4D 100%)`,
+                  }}
+                />
+                <div className="text-center text-white text-xs font-medium">
+                  {Math.round(volume * 100)}%
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={handleVolumeReset}
+                    className="text-xs bg-spotify-green/20 text-spotify-green px-2 py-1 rounded hover:bg-spotify-green/30 transition-colors"
+                    title="Reset to normal volume"
+                  >
+                    Normal
+                  </button>
+                  <button
+                    onClick={handleVolumeMute}
+                    className="text-xs bg-gray-700/50 text-spotify-gray px-2 py-1 rounded hover:bg-gray-600/50 transition-colors"
+                    title={volume > 0 ? "Mute" : "Unmute"}
+                  >
+                    {volume > 0 ? "Mute" : "Unmute"}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -356,13 +403,15 @@ const AudioPlayer = () => {
 
       {/* Queue Panel */}
       {showQueue && (
-        <div className="absolute bottom-full left-0 right-0 bg-gray-900/95 backdrop-blur-xl border-t border-gray-700/50 p-6 max-h-80 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">
+        <div className="absolute bottom-full left-0 right-0 bg-gradient-to-b from-spotify-black/95 to-spotify-black-light/95 backdrop-blur-xl border-t border-gray-700/30 p-6 max-h-80 overflow-y-auto animate-slide-up">
+          <div className="container-responsive">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-white font-bold text-lg">Queue</h3>
+              <h3 className="text-white font-bold text-lg gradient-text">
+                Queue
+              </h3>
               <button
                 onClick={() => setShowQueue(false)}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-spotify-gray hover:text-white transition-colors hover-lift"
               >
                 <span className="text-xl">✕</span>
               </button>
@@ -370,47 +419,50 @@ const AudioPlayer = () => {
 
             {queue.length === 0 ? (
               <div className="text-center py-8">
-                <div className="text-4xl mb-4">🎵</div>
-                <p className="text-gray-400">No songs in queue</p>
+                <div className="text-4xl mb-4 animate-float">🎵</div>
+                <p className="text-spotify-gray">No songs in queue</p>
               </div>
             ) : (
               <div className="space-y-2">
                 {queue.map((song, index) => (
                   <div
                     key={`${song._id}-${index}`}
-                    className={`flex items-center justify-between p-4 rounded-xl transition-all duration-300 ${
+                    className={`song-card ${
                       index === currentIndex
-                        ? "bg-gradient-to-r from-spotify-green/20 to-green-400/20 border border-spotify-green/30"
-                        : "hover:bg-gray-800/50 border border-transparent hover:border-gray-600/30"
+                        ? "bg-gradient-to-r from-spotify-green/20 to-green-400/20 border-spotify-green/30"
+                        : ""
                     }`}
                   >
-                    <div className="flex items-center space-x-4 flex-1 min-w-0">
-                      <div className="w-10 h-10 bg-gradient-to-br from-spotify-green to-green-400 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">
-                          {index === currentIndex ? "▶️" : index + 1}
+                    <div className="song-card-overlay"></div>
+                    <div className="relative z-10 flex items-center justify-between">
+                      <div className="flex items-center space-x-4 flex-1 min-w-0">
+                        <div className="w-10 h-10 bg-gradient-spotify rounded-lg flex items-center justify-center shadow-spotify">
+                          <span className="text-white font-bold text-sm">
+                            {index === currentIndex ? "▶️" : index + 1}
+                          </span>
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-white font-medium truncate">
+                            {song.title}
+                          </div>
+                          <div className="text-spotify-gray text-sm truncate">
+                            {song.artist}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <span className="text-spotify-gray text-sm font-medium">
+                          {song.formattedDuration}
                         </span>
+                        {index !== currentIndex && (
+                          <button
+                            onClick={() => handleRemoveFromQueue(index)}
+                            className="text-spotify-gray hover:text-red-400 transition-colors hover:scale-110"
+                          >
+                            <span className="text-lg">✕</span>
+                          </button>
+                        )}
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-white font-medium truncate">
-                          {song.title}
-                        </div>
-                        <div className="text-gray-400 text-sm truncate">
-                          {song.artist}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <span className="text-gray-400 text-sm">
-                        {song.formattedDuration}
-                      </span>
-                      {index !== currentIndex && (
-                        <button
-                          onClick={() => handleRemoveFromQueue(index)}
-                          className="text-gray-400 hover:text-red-400 transition-colors hover:scale-110"
-                        >
-                          <span className="text-lg">✕</span>
-                        </button>
-                      )}
                     </div>
                   </div>
                 ))}

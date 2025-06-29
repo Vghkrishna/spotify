@@ -6,7 +6,7 @@ const initialState = {
   currentIndex: 0,
   isPlaying: false,
   isPaused: false,
-  volume: 0.7,
+  volume: 0.4,
   currentTime: 0,
   duration: 0,
   audioElement: null,

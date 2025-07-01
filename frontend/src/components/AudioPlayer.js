@@ -43,14 +43,11 @@ const AudioPlayer = () => {
 
   useEffect(() => {
     if (currentSong && audioRef.current) {
-      console.log(
-        "Setting audio source:",
-        `http://localhost:5000/uploads/${currentSong.filePath}`
-      );
+      console.log("Setting audio source:", currentSong.filePath);
       console.log("Current song:", currentSong);
 
       // Only set new source if it's a different song
-      const newSrc = `http://localhost:5000/uploads/${currentSong.filePath}`;
+      const newSrc = currentSong.filePath;
       if (audioRef.current.src !== newSrc) {
         console.log("Loading new song, resetting audio");
         audioRef.current.src = newSrc;

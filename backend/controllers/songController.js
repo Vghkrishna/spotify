@@ -74,6 +74,9 @@ const getSongById = async (req, res) => {
 // @access  Private (Admin)
 const addSong = async (req, res) => {
   try {
+    console.log("addSong called");
+    console.log("req.body:", req.body);
+    console.log("req.file:", req.file);
     const { title, artist, album, genre, duration, releaseYear } = req.body;
 
     if (!req.file) {
@@ -89,7 +92,7 @@ const addSong = async (req, res) => {
       releaseYear: releaseYear
         ? parseInt(releaseYear)
         : new Date().getFullYear(),
-      filePath: req.file.filename,
+      filePath: req.file.path,
       uploadedBy: req.user._id,
     });
 
@@ -148,12 +151,7 @@ const deleteSong = async (req, res) => {
       return res.status(404).json({ message: "Song not found" });
     }
 
-    // Delete the audio file
-    const filePath = path.join(__dirname, "../uploads", song.filePath);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
-
+    // No need to delete the audio file from local storage since it's on Cloudinary
     await Song.findByIdAndDelete(req.params.id);
     res.json({ message: "Song deleted successfully" });
   } catch (error) {

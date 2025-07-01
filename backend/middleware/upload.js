@@ -1,25 +1,30 @@
 const multer = require("multer");
-const path = require("path");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
-// Configure storage for audio files
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    // Generate unique filename with timestamp
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
-    );
-  },
+// Configure Cloudinary storage for audio files
+const audioStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => ({
+    folder: "spotify_uploads/audio",
+    resource_type: "video", // Cloudinary treats audio as 'video'
+    public_id: Date.now() + "-" + file.originalname,
+  }),
+});
+
+// Configure Cloudinary storage for image files
+const imageStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => ({
+    folder: "spotify_uploads/images",
+    resource_type: "image",
+    public_id: Date.now() + "-" + file.originalname,
+  }),
 });
 
 // File filter for audio files
-const fileFilter = (req, file, cb) => {
+const audioFileFilter = (req, file, cb) => {
   const allowedTypes = ["audio/mpeg", "audio/wav", "audio/ogg", "audio/mp3"];
-
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
@@ -30,31 +35,32 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Configure multer for audio uploads
+// File filter for image files
+const imageFileFilter = (req, file, cb) => {
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(
+      new Error(
+        "Invalid file type. Only JPEG, PNG, and GIF images are allowed."
+      ),
+      false
+    );
+  }
+};
+
 const uploadAudio = multer({
-  storage: storage,
-  fileFilter: fileFilter,
+  storage: audioStorage,
+  fileFilter: audioFileFilter,
   limits: {
     fileSize: 50 * 1024 * 1024, // 50MB limit
   },
 });
 
-// Configure multer for image uploads (for cover images)
 const uploadImage = multer({
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(
-        new Error(
-          "Invalid file type. Only JPEG, PNG, and GIF images are allowed."
-        ),
-        false
-      );
-    }
-  },
+  storage: imageStorage,
+  fileFilter: imageFileFilter,
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB limit
   },

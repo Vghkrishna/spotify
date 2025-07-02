@@ -145,7 +145,7 @@ const AdminSongManagement = () => {
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 bg-gradient-to-br from-spotify-green to-green-400 rounded-2xl flex items-center justify-center shadow-2xl animate-float">
-              <span className="text-3xl">🎵</span>
+              <span className="text-3xl">🎧</span>
             </div>
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-spotify-green to-green-400 bg-clip-text text-transparent mb-2">
@@ -170,7 +170,7 @@ const AdminSongManagement = () => {
                   </div>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300">
-                  <span className="text-2xl">🎵</span>
+                  <span className="text-2xl">🎧</span>
                 </div>
               </div>
             </div>
@@ -287,7 +287,7 @@ const AdminSongManagement = () => {
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-spotify-green to-green-400 rounded-xl flex items-center justify-center">
-                      <span className="text-2xl">🎵</span>
+                      <span className="text-2xl">🎧</span>
                     </div>
                     <div>
                       <h3 className="text-3xl font-bold text-white">
@@ -441,7 +441,7 @@ const AdminSongManagement = () => {
           {filteredSongs.length === 0 ? (
             <div className="text-center py-20">
               <div className="w-32 h-32 bg-gradient-to-br from-gray-700 to-gray-800 rounded-full flex items-center justify-center mx-auto mb-8">
-                <span className="text-6xl">🎵</span>
+                <span className="text-6xl">🎧</span>
               </div>
               <h3 className="text-3xl font-bold text-white mb-4">
                 {searchTerm ? "No Songs Found" : "Your Library is Empty"}
@@ -470,7 +470,7 @@ const AdminSongManagement = () => {
                     className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group"
                   >
                     <div className="w-full h-32 bg-gradient-to-br from-spotify-green/20 to-green-500/20 rounded-xl mb-4 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
-                      <span className="text-4xl">🎵</span>
+                      <span className="text-4xl">🎧</span>
                     </div>
 
                     <h3 className="text-white font-semibold text-lg mb-2 truncate">
@@ -555,7 +555,7 @@ const AdminSongManagement = () => {
                         <div className="flex items-center space-x-4">
                           <div className="w-12 h-12 bg-gradient-to-br from-spotify-green to-green-400 rounded-xl flex items-center justify-center">
                             <span className="text-lg font-bold text-white">
-                              🎵
+                            🎧
                             </span>
                           </div>
                           <div>

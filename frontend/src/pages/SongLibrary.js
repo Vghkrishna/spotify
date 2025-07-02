@@ -142,7 +142,7 @@ const SongLibrary = () => {
               <div className="relative z-10">
                 <div className="flex items-center space-x-4 mb-4">
                   <div className="w-16 h-16 bg-gradient-spotify rounded-xl flex items-center justify-center shadow-spotify group-hover:shadow-spotify-hover transition-all duration-300 group-hover:scale-110">
-                    <span className="text-2xl font-bold text-white">🎵</span>
+                    <span className="text-2xl font-bold text-white">🎧</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-white font-semibold text-lg truncate text-shadow">
@@ -196,7 +196,7 @@ const SongLibrary = () => {
         {filteredSongs.length === 0 && (
           <div className="text-center py-16 animate-fade-in-up">
             <div className="w-24 h-24 bg-gradient-spotify rounded-full flex items-center justify-center mx-auto mb-6 shadow-spotify animate-float">
-              <span className="text-4xl">🎵</span>
+              <span className="text-4xl">🎧</span>
             </div>
             <h3 className="text-2xl font-bold text-white mb-4 text-shadow">
               {searchTerm ? "No Songs Found" : "No Songs Available"}

@@ -144,7 +144,7 @@ const PlaylistPage = () => {
       <div className="bg-gradient-to-b from-spotify-green to-spotify-black-lighter p-8 rounded-lg mb-8">
         <div className="flex items-center space-x-6">
           <div className="w-32 h-32 bg-spotify-black rounded-lg flex items-center justify-center text-6xl">
-            🎵
+          🎧
           </div>
           <div className="flex-1">
             <h1 className="text-4xl font-bold text-white mb-2">
@@ -221,7 +221,7 @@ const PlaylistPage = () => {
                     {index + 1}
                   </span>
                   <div className="w-12 h-12 bg-spotify-green rounded flex items-center justify-center text-white font-bold">
-                    🎵
+                  🎧
                   </div>
                   <div className="flex-1">
                     <div className="text-white font-medium">

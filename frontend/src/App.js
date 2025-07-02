@@ -46,7 +46,7 @@ function App() {
         <div className="relative z-10 text-center">
           {/* Logo */}
           <div className="w-20 h-20 bg-gradient-spotify rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-spotify animate-pulse-slow">
-            <span className="text-4xl">🎵</span>
+            <span className="text-4xl">🎧</span>
           </div>
 
           {/* Loading spinner */}

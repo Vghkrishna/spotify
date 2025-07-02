@@ -254,7 +254,7 @@ const AudioPlayer = () => {
         {/* Song Info */}
         <div className="flex items-center space-x-4 flex-1 min-w-0">
           <div className="w-16 h-16 bg-gradient-spotify rounded-xl flex items-center justify-center shadow-spotify animate-float">
-            <span className="text-2xl font-bold text-white">🎵</span>
+            <span className="text-2xl font-bold text-white">🎧</span>
           </div>
           <div className="min-w-0 flex-1">
             <div className="text-white font-semibold truncate text-shadow">
@@ -416,7 +416,7 @@ const AudioPlayer = () => {
 
             {queue.length === 0 ? (
               <div className="text-center py-8">
-                <div className="text-4xl mb-4 animate-float">🎵</div>
+                <div className="text-4xl mb-4 animate-float">🎧</div>
                 <p className="text-spotify-gray">No songs in queue</p>
               </div>
             ) : (

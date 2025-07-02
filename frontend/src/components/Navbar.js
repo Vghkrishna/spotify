@@ -24,7 +24,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/dashboard" className="flex items-center space-x-3 group">
             <div className="w-10 h-10 bg-gradient-spotify rounded-xl flex items-center justify-center shadow-spotify group-hover:shadow-spotify-hover transition-all duration-300 group-hover:scale-105 animate-float">
-              <span className="text-2xl font-bold text-white">🎵</span>
+              <span className="text-2xl font-bold text-white">🎧</span>
             </div>
             <div className="hidden sm:block">
               <h1 className="text-2xl font-bold gradient-text">

@@ -99,7 +99,7 @@ const Register = () => {
         {/* Logo and Header */}
         <div className="text-center mb-8">
           <div className="w-24 h-24 bg-gradient-spotify rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-spotify animate-float">
-            <span className="text-5xl">🎵</span>
+            <span className="text-5xl">🎧</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-3 text-shadow">
             Join the Music

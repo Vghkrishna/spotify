@@ -131,10 +131,10 @@ spotify/
 
 ### Authentication
 
-- `POST /api/users/register` - User registration
-- `POST /api/users/login` - User login
-- `GET /api/users/profile` - Get user profile
-- `PUT /api/users/profile` - Update user profile
+- `POST /users/register` - User registration
+- `POST /users/login` - User login
+- `GET /users/profile` - Get user profile
+- `PUT /users/profile` - Update user profile
 
 ### Songs
 

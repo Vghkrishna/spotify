@@ -7,7 +7,7 @@ const generateToken = (userId) => {
 };
 
 // @desc    Register user
-// @route   POST /api/users/register
+// @route   POST /users/register
 // @access  Public
 const registerUser = async (req, res) => {
   try {
@@ -45,7 +45,7 @@ const registerUser = async (req, res) => {
 };
 
 // @desc    Login user
-// @route   POST /api/users/login
+// @route   POST /users/login
 // @access  Public
 const loginUser = async (req, res) => {
   try {
@@ -82,7 +82,7 @@ const loginUser = async (req, res) => {
 };
 
 // @desc    Get user profile
-// @route   GET /api/users/profile
+// @route   GET /users/profile
 // @access  Private
 const getUserProfile = async (req, res) => {
   try {
@@ -95,7 +95,7 @@ const getUserProfile = async (req, res) => {
 };
 
 // @desc    Update user profile
-// @route   PUT /api/users/profile
+// @route   PUT /users/profile
 // @access  Private
 const updateUserProfile = async (req, res) => {
   try {

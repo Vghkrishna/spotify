@@ -23,7 +23,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: allowedOrigins,
-    credentials: true, // if using cookies/auth headers
+    // credentials: true, // if using cookies/auth headers
   })
 );
 app.use(express.json());

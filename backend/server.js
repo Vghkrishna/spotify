@@ -16,7 +16,17 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:3000", // for local dev
+  "https://your-frontend-domain.com", // replace with actual frontend
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true, // if using cookies/auth headers
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

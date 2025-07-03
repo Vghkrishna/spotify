@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/playlists";
+const API_URL = "http://spotify-production-97f7.up.railway.app/api/playlists";
 
 const initialState = {
   playlists: [],

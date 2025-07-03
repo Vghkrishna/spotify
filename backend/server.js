@@ -19,7 +19,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*",
+    origin: "https://spotify-two-flax.vercel.app",
   })
 );
 

@@ -16,17 +16,13 @@ dotenv.config();
 const app = express();
 
 // Middleware
-const allowedOrigins = [
-  "http://localhost:3001", // for local dev
-  "https://spotify-production-97f7.up.railway.app",
-];
 
 app.use(
   cors({
-    origin: allowedOrigins,
-    // credentials: true, // if using cookies/auth headers
+    origin: "*",
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

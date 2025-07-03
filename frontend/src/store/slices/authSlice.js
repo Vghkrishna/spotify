@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const API_URL = "http://spotify-production-97f7.up.railway.app/users";
+const API_URL = "https://spotify-production-97f7.up.railway.app/users";
 
 // Get user from localStorage
 const user = JSON.parse(localStorage.getItem("user"));

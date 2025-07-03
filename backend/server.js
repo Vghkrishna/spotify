@@ -17,8 +17,7 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
-  "http://localhost:3000", // for local dev
-  "https://your-frontend-domain.com", // replace with actual frontend
+  "http://localhost:3001", // for local dev
 ];
 
 app.use(

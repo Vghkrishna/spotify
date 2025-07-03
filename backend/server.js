@@ -18,6 +18,7 @@ const app = express();
 // Middleware
 const allowedOrigins = [
   "http://localhost:3001", // for local dev
+  "https://spotify-production-97f7.up.railway.app",
 ];
 
 app.use(

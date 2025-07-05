@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAdminStats } from "../store/slices/adminSlice";
 import {
-  getSongs,
+  getAllSongsForAdmin,
   addSong,
   updateSong,
   deleteSong,
@@ -41,7 +41,7 @@ const AdminDashboard = () => {
       dispatch(getAdminStats());
     }
     if (!songsLoaded) {
-      dispatch(getSongs());
+      dispatch(getAllSongsForAdmin());
     }
   }, [dispatch, statsLoaded, songsLoaded]);
 
@@ -322,13 +322,6 @@ const AdminDashboard = () => {
             <div className="bg-red-500 text-white p-4 rounded-lg mb-6">
               <p className="font-medium">Error:</p>
               <p>{songsError}</p>
-            </div>
-          )}
-
-          {songsSuccess && (
-            <div className="bg-green-500 text-white p-4 rounded-lg mb-6">
-              <p className="font-medium">Success!</p>
-              <p>Song operation completed successfully.</p>
             </div>
           )}
 

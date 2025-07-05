@@ -7,6 +7,7 @@ const initialState = {
   songs: [],
   currentSong: null,
   isLoading: false,
+  isLoadingMore: false,
   isError: false,
   isSuccess: false,
   message: "",
@@ -14,9 +15,10 @@ const initialState = {
   currentPage: 1,
   total: 0,
   isLoaded: false,
+  hasMore: true,
 };
 
-// Get all songs
+// Get all songs (initial load)
 export const getSongs = createAsyncThunk(
   "songs/getAll",
   async (params = {}, thunkAPI) => {
@@ -30,7 +32,49 @@ export const getSongs = createAsyncThunk(
         return state.songs;
       }
 
-      const response = await axios.get(API_URL, { params });
+      // Set default limit to 8 for initial load
+      const defaultParams = { ...params, limit: 8, page: 1 };
+      const response = await axios.get(API_URL, { params: defaultParams });
+      return response.data;
+    } catch (error) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Load more songs (infinite scroll)
+export const loadMoreSongs = createAsyncThunk(
+  "songs/loadMore",
+  async (params = {}, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState();
+      const nextPage = state.songs.currentPage + 1;
+
+      if (nextPage > state.songs.totalPages) {
+        return { songs: [], hasMore: false };
+      }
+
+      const loadMoreParams = { ...params, limit: 8, page: nextPage };
+      const response = await axios.get(API_URL, { params: loadMoreParams });
+      return response.data;
+    } catch (error) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Get all songs for admin (no pagination)
+export const getAllSongsForAdmin = createAsyncThunk(
+  "songs/getAllForAdmin",
+  async (params = {}, thunkAPI) => {
+    try {
+      const response = await axios.get(API_URL, {
+        params: { ...params, limit: 1000 },
+      });
       return response.data;
     } catch (error) {
       const message =
@@ -162,6 +206,7 @@ export const songSlice = createSlice({
     builder
       .addCase(getSongs.pending, (state) => {
         state.isLoading = true;
+        state.isError = false;
       })
       .addCase(getSongs.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -171,8 +216,47 @@ export const songSlice = createSlice({
         state.currentPage = action.payload.currentPage;
         state.total = action.payload.total;
         state.isLoaded = true;
+        state.hasMore = action.payload.currentPage < action.payload.totalPages;
       })
       .addCase(getSongs.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(loadMoreSongs.pending, (state) => {
+        state.isLoadingMore = true;
+      })
+      .addCase(loadMoreSongs.fulfilled, (state, action) => {
+        state.isLoadingMore = false;
+        if (action.payload.songs && action.payload.songs.length > 0) {
+          state.songs = [...state.songs, ...action.payload.songs];
+          state.currentPage = action.payload.currentPage;
+          state.hasMore =
+            action.payload.currentPage < action.payload.totalPages;
+        } else {
+          state.hasMore = false;
+        }
+      })
+      .addCase(loadMoreSongs.rejected, (state, action) => {
+        state.isLoadingMore = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getAllSongsForAdmin.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(getAllSongsForAdmin.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.songs = action.payload.songs;
+        state.totalPages = action.payload.totalPages;
+        state.currentPage = action.payload.currentPage;
+        state.total = action.payload.total;
+        state.isLoaded = true;
+        state.hasMore = false; // Admin gets all songs at once
+      })
+      .addCase(getAllSongsForAdmin.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

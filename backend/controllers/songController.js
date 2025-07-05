@@ -7,7 +7,7 @@ const path = require("path");
 // @access  Public
 const getAllSongs = async (req, res) => {
   try {
-    const { search, genre, artist, page = 1, limit = 20 } = req.query;
+    const { search, genre, artist, page = 1, limit = 8 } = req.query;
 
     let query = { isActive: true };
 

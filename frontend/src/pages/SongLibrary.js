@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getSongs } from "../store/slices/songSlice";
+import { getSongs, loadMoreSongs } from "../store/slices/songSlice";
 import { getPlaylists, addSongToPlaylist } from "../store/slices/playlistSlice";
 import { playSong, addToQueue } from "../store/slices/playerSlice";
 import { useToast } from "../context/ToastContext";
@@ -11,7 +11,9 @@ const SongLibrary = () => {
   const {
     songs,
     isLoading: songsLoading,
+    isLoadingMore,
     isLoaded: songsLoaded,
+    hasMore,
   } = useSelector((state) => state.songs);
   const { playlists, isLoaded: playlistsLoaded } = useSelector(
     (state) => state.playlists
@@ -20,6 +22,7 @@ const SongLibrary = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [showAddToPlaylistModal, setShowAddToPlaylistModal] = useState(false);
+  const observerRef = useRef();
 
   useEffect(() => {
     if (!songsLoaded) {
@@ -29,6 +32,21 @@ const SongLibrary = () => {
       dispatch(getPlaylists());
     }
   }, [dispatch, songsLoaded, playlistsLoaded]);
+
+  // Infinite scroll callback
+  const lastSongElementRef = useCallback(
+    (node) => {
+      if (songsLoading || isLoadingMore) return;
+      if (observerRef.current) observerRef.current.disconnect();
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          dispatch(loadMoreSongs());
+        }
+      });
+      if (node) observerRef.current.observe(node);
+    },
+    [songsLoading, isLoadingMore, hasMore, dispatch]
+  );
 
   const handlePlaySong = (song) => {
     dispatch(playSong(song));
@@ -134,6 +152,9 @@ const SongLibrary = () => {
           {filteredSongs.map((song, index) => (
             <div
               key={song._id}
+              ref={
+                index === filteredSongs.length - 1 ? lastSongElementRef : null
+              }
               className="song-card p-6 group cursor-pointer"
               onClick={() => handlePlaySong(song)}
               style={{ animationDelay: `${index * 100}ms` }}
@@ -192,6 +213,26 @@ const SongLibrary = () => {
             </div>
           ))}
         </div>
+
+        {/* Loading More Indicator */}
+        {isLoadingMore && (
+          <div className="text-center py-8 animate-fade-in-up">
+            <div className="loading-spinner mx-auto mb-4"></div>
+            <p className="text-spotify-gray">Loading more songs...</p>
+          </div>
+        )}
+
+        {/* End of Songs Indicator */}
+        {!hasMore && filteredSongs.length > 0 && (
+          <div className="text-center py-8 animate-fade-in-up">
+            <div className="w-16 h-16 bg-gradient-spotify/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">🎵</span>
+            </div>
+            <p className="text-spotify-gray">
+              You've reached the end of your music library
+            </p>
+          </div>
+        )}
 
         {filteredSongs.length === 0 && (
           <div className="text-center py-16 animate-fade-in-up">
